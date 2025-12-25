@@ -1,8 +1,16 @@
+//
+//  TitledDynamicSheetModifier.swift
+//  Passive Coin Tracker
+//
+//
+
+
 import SwiftUI
 
 // MARK: - View Modifier
 
 private struct TitledDynamicSheetModifier<SheetContent: View>: ViewModifier {
+    let image: ImageResource?
     let title: String
     @Binding var isPresented: Bool
     let content: () -> SheetContent
@@ -12,12 +20,12 @@ private struct TitledDynamicSheetModifier<SheetContent: View>: ViewModifier {
     func body(content base: Content) -> some View {
         base.sheet(isPresented: $isPresented) {
             TitledDynamicSheet(
+                image: image,
                 title: title,
                 isPresented: $isPresented,
                 measuredHeight: $measuredHeight,
                 content: self.content
             )
-            // Важно: .height доступен с iOS 16
             .presentationDetents([.height(clamp(measuredHeight, min: 120, max: UIScreen.main.bounds.height * 0.9))])
             .presentationDragIndicator(.visible)
         }
@@ -31,6 +39,7 @@ private struct TitledDynamicSheetModifier<SheetContent: View>: ViewModifier {
 // MARK: - Sheet Container
 
 private struct TitledDynamicSheet<SheetContent: View>: View {
+    let image: ImageResource?
     let title: String
     @Binding var isPresented: Bool
     @Binding var measuredHeight: CGFloat
@@ -44,10 +53,12 @@ private struct TitledDynamicSheet<SheetContent: View>: View {
         VStack(spacing: 0) {
             header
                 .padding(.horizontal, 16)
-                .padding(.top, 12)
+                .padding(.top, 32)
                 .padding(.bottom, 8)
 
-            Divider()
+            RoundedRectangle(cornerRadius: 2)
+                .frame(height: 1)
+                .foregroundStyle(.progressSecondary)
 
             // Контент
             VStack(alignment: .leading, spacing: 0) {
@@ -64,26 +75,37 @@ private struct TitledDynamicSheet<SheetContent: View>: View {
                 }
             )
         }
-        .background(Color(.systemBackground))
+        .frame(maxHeight: .infinity, alignment: .top)
+        .background(Color(.progressSecondary))
     }
 
     private var header: some View {
         HStack(spacing: 12) {
-            Text(title)
-                .font(.headline)
-                .lineLimit(2)
-                .frame(maxWidth: .infinity, alignment: .leading)
-
+            HStack(spacing: 8) {
+                if let image {
+                    Image(image)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 20)
+                        .bold()
+                }
+                
+                Text(title)
+                    .font(.system(size: 18, weight: .medium))
+                    .foregroundStyle(.white)
+                    .lineLimit(2)
+                    
+            }.frame(maxWidth: .infinity, alignment: .leading)
+            
             Button {
                 isPresented = false
             } label: {
                 Image(systemName: "xmark")
-                    .font(.system(size: 14, weight: .semibold))
-                    .frame(width: 32, height: 32)
-                    .background(Color(.secondarySystemBackground))
-                    .clipShape(Circle())
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 10, height: 10)
+                    .foregroundStyle(.white)
             }
-            .accessibilityLabel("Close")
         }
     }
 }
@@ -112,12 +134,12 @@ private struct HeightPreferenceKey: PreferenceKey {
 // MARK: - Public API
 
 extension View {
-    /// Sheet с тайтлом, кнопкой X и динамической высотой по контенту (iOS 16+)
-    func titledDynamicSheet<SheetContent: View>(
+    func titledSheet<SheetContent: View>(
+        image: ImageResource? = nil,
         title: String,
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> SheetContent
     ) -> some View {
-        modifier(TitledDynamicSheetModifier(title: title, isPresented: isPresented, content: content))
+        modifier(TitledDynamicSheetModifier(image: image, title: title, isPresented: isPresented, content: content))
     }
 }
