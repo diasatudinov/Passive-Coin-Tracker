@@ -23,4 +23,19 @@ enum IncomeSource: String, CaseIterable, Codable {
     var title: String {
         self.rawValue
     }
+    
+    var color: Color {
+        switch self {
+        case .dividends:
+                .accent
+        case .apartmentRental:
+                .statisticsGreen
+        case .royalties:
+                .orange
+        case .bonds:
+                .expensesBlue
+        case .other:
+                .purple
+        }
+    }
 }

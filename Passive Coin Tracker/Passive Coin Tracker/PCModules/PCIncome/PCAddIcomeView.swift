@@ -2,7 +2,6 @@
 //  PCAddIcomeView.swift
 //  Passive Coin Tracker
 //
-//  Created by Dias Atudinov on 28.12.2025.
 //
 
 import SwiftUI

@@ -1,3 +1,10 @@
+//
+//  IncomePieChart.swift
+//  Passive Coin Tracker
+//
+//
+
+
 import SwiftUI
 
 struct IncomePieChart: View {
@@ -55,18 +62,6 @@ struct IncomePieChart: View {
                     PieSliceShape(startAngle: slice.startAngle, endAngle: slice.endAngle)
                         .fill(slice.source.color)
                 }
-
-                // Если нужен donut — “вырезаем” центр
-                if lineWidth > 0 {
-                    Circle()
-                        .fill(Color(.systemBackground))
-                        .padding(lineWidth)
-                }
-
-                // Центр (опционально)
-                Text(totalValue, format: .number)
-                    .font(.headline)
-                    .foregroundStyle(.primary)
             }
         }
         .aspectRatio(1, contentMode: .fit)
