@@ -8,21 +8,21 @@
 
 import SwiftUI
 
-struct IncomePieChart: View {
-    let incomes: [Income]
+struct ExpensePieChart: View {
+    let expenses: [Expense]
     var lineWidth: CGFloat = 18 // если 0 — будет обычный pie без дырки
 
     private struct Slice: Identifiable {
         let id = UUID()
-        let source: IncomeSource
+        let category: ExpenseCategory
         let value: Double
         let startAngle: Angle
         let endAngle: Angle
     }
 
     private var slices: [Slice] {
-        // Суммируем по source
-        let totals: [(IncomeSource, Double)] = Dictionary(grouping: incomes, by: \.source)
+        // Суммируем по category
+        let totals: [(ExpenseCategory, Double)] = Dictionary(grouping: expenses, by: \.category)
             .map { (key, values) in
                 (key, values.reduce(0.0) { $0 + $1.amount.doubleValue })
             }
@@ -39,7 +39,7 @@ struct IncomePieChart: View {
             let end = current + delta
             current = end
             return Slice(
-                source: source,
+                category: source,
                 value: value,
                 startAngle: .radians(start),
                 endAngle: .radians(end)
@@ -48,7 +48,7 @@ struct IncomePieChart: View {
     }
 
     private var totalValue: Double {
-        incomes.reduce(0.0) { $0 + $1.amount.doubleValue }
+        expenses.reduce(0.0) { $0 + $1.amount.doubleValue }
     }
 
     var body: some View {
@@ -61,7 +61,7 @@ struct IncomePieChart: View {
             } else {
                 ForEach(slices) { slice in
                     PieSliceShape(startAngle: slice.startAngle, endAngle: slice.endAngle)
-                        .fill(slice.source.color)
+                        .fill(slice.category.color)
                 }
             }
         }
