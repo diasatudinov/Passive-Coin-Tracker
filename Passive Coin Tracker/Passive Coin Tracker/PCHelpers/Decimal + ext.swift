@@ -2,7 +2,10 @@
 //  File.swift
 //  Passive Coin Tracker
 //
-//  Created by Dias Atudinov on 29.12.2025.
 //
 
-import Foundation
+import SwiftUI
+
+extension Decimal {
+    var doubleValue: Double { NSDecimalNumber(decimal: self).doubleValue }
+}

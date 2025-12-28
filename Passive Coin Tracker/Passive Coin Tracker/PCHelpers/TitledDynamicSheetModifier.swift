@@ -54,13 +54,12 @@ private struct TitledDynamicSheet<SheetContent: View>: View {
             header
                 .padding(.horizontal, 16)
                 .padding(.top, 32)
-                .padding(.bottom, 8)
+                .padding(.bottom, 17)
 
             RoundedRectangle(cornerRadius: 2)
                 .frame(height: 1)
                 .foregroundStyle(.progressSecondary)
 
-            // Контент
             VStack(alignment: .leading, spacing: 0) {
                 self.content()
                     .padding(16)
@@ -76,7 +75,7 @@ private struct TitledDynamicSheet<SheetContent: View>: View {
             )
         }
         .frame(maxHeight: .infinity, alignment: .top)
-        .background(Color(.progressSecondary))
+        .background(Color(.secondaryBlack))
     }
 
     private var header: some View {
