@@ -30,9 +30,9 @@ struct AWMenuView: View {
             case 0:
                 PCIncomeView(viewModel: viewModel)
             case 1:
-                Color.red.ignoresSafeArea()
+                PCExpensesView(viewModel: viewModel)
             case 2:
-                Color.yellow.ignoresSafeArea()
+                PCStatisticsView(viewModel: viewModel)
             default:
                 Text("default")
             }
@@ -44,6 +44,7 @@ struct AWMenuView: View {
                     ForEach(0..<tabs.count) { index in
                         Button(action: {
                             selectedTab = index
+                            
                         }) {
                             VStack(spacing: 4) {
                                 Image(selectedTab == index ? selectedIcon(for: index) : icon(for: index))
